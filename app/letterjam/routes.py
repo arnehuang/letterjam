@@ -29,13 +29,13 @@ def add_player():
     global words, history_log, players, status
     if status != GameStatus.waiting_to_start:
         logger.error(f"Cannot add player, Game status is {status.name}")
-        history_log.append(f"Cannot add player, Game status is {status.name}")
+        flash(f"Cannot add player, Game status is {status.name}")
         return redirect(url_for('letterjam.index'))
     for a_word in words:
         word_length = len(a_word.word)
         break
     if word_length != 0 and word_length != len(players_word):
-        history_log.append(f"Sorry, the current word length is {word_length}. Your word was not added. ")
+        flash(f"Sorry, the current word length is {word_length}. Your word was not added. ")
         return render_template('index.html',
                                history_log=history_log
                                )
@@ -49,7 +49,6 @@ def add_player():
 def current_status(player):
     global words, history_log, players, status
     from . import generate_table_info
-    # TODO: FLESH OUT GENERATE TABLE INFO
     table_info = generate_table_info(words, players, player, status)
     return render_template('current_status.html',
                            table_info=table_info,

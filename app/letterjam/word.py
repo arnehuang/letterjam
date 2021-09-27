@@ -16,6 +16,7 @@ class Word:
         self.revealed_idx += 1
 
     def assign_guesser(self, players):
+        # TODO: Assign a random guesser instead of a fixed one
         if self.guesser is None:
             self_idx = players.index(self.creator)
             if self_idx < len(
@@ -24,7 +25,6 @@ class Word:
             else:
                 guesser_idx = 0
             self.guesser = players[guesser_idx]
-            # TODO: TEST THIS
 
     @staticmethod
     def scramble(word):
