@@ -3,7 +3,7 @@ import random
 
 class Word:
     def __init__(self, word, player):
-        self.word = word
+        self.word = word.upper()
         self.scrambled = Word.scramble(word)
         self.creator = player
         self.guesser = None
