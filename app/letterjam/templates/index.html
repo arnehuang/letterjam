@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Letter Jam</title>
+
+<form method="POST" action="{{ url_for('letterjam.add_player') }}">
+  <label for="player">Player:</label><br>
+  <input type="text" id="player" name="player"><br>
+  <label for="word">Word:</label><br>
+  <input type="text" id="word" name="word"> <br>
+  <input type="submit" value="Add Player">
+</form>
+<br><br><br><br><br><br>
+
+        <table>
+        <tr>
+            <th>History Log</th>
+        </tr>
+        {%for history in history_log%}
+        <tr>
+            <td>{{history}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+<br><br><br><br><br><br>
+<input type="button" onclick="location.href='{{ url_for('letterjam.reset') }}';" value="RESET - DONT PRESS" />
+
+</head>
+<body>
+
+</body>
+</html>

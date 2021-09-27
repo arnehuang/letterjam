@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Letter Jam - Game Status</title>
+    <h1> Game Status: {{status.name}} </h1>
+    <table>
+        <tr>
+            {%for player in table_info[0]%}
+            <th>{{player}}</th>
+            {%endfor%}
+        </tr>
+        {% if status.name == 'in_progress' %}
+            {%for row in table_info[1:]%}
+            <tr>
+                <td>{{row}}</td>
+            </tr>
+            {%endfor%}
+        {% else %}
+            {%for player in table_info[0]%}
+            <th>joined</th>
+            {%endfor%}
+        {% endif %}
+    </table>
+        {% if status.name == 'waiting_to_start' %}
+    <form method="POST" action="{{ url_for('letterjam._start_game', player=player) }}">
+        <input type="submit" value="Start Game">
+    </form>
+        {% else %}
+
+    <form method="POST" action="{{ url_for('letterjam.hint', player=player) }}">
+          <label for="hint">Hint:</label><br>
+          <input type="text" id="hint" name="hint"><br>
+          <input type="submit" value="Give Hint">
+    </form>
+        <br><br><br>
+    <form method="POST" action="{{ url_for('letterjam.advance', player=player) }}">
+        <input type="submit" value="advance">
+    </form>
+
+        {% endif %}
+
+
+    <br><br><br><br><br><br>
+
+    <table>
+        <tr>
+            <th>History Log</th>
+        </tr>
+        {%for history in history_log%}
+        <tr>
+            <td>{{history}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+
+
+    <br><br><br><br><br><br>
+    <input type="button" onclick="location.href='{{ url_for('letterjam.reset') }}';" value="RESET - DONT PRESS"/>
+
+</head>
+<body>
+
+</body>
+</html>
