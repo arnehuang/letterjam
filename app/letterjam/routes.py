@@ -12,11 +12,8 @@ status = GameStatus.waiting_to_start
 
 @letterjam.route('/')
 def index():
-    # Has button to add player
-    # Has button to reset
-    logger.info('Hit Index')
-    global history_log
-    return render_template('index.html', history_log=history_log)
+    global history_log, status, players
+    return render_template('index.html', history_log=history_log, status=status, players=players)
 
 
 @letterjam.route('/add_player', methods=['POST'])
@@ -36,9 +33,7 @@ def add_player():
         break
     if word_length != 0 and word_length != len(players_word):
         flash(f"Sorry, the current word length is {word_length}. Your word was not added. ")
-        return render_template('index.html',
-                               history_log=history_log
-                               )
+        return redirect(url_for('letterjam.index'))
     words.append(Word(players_word, player))
     players.append(player)
     history_log.append(f'Player {player} Joined')
