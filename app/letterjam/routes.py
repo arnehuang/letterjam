@@ -23,7 +23,7 @@ def index():
 # Adding requires /add_player?word=X&player=Y
 def add_player():
     players_word = request.form.get('word')
-    player = request.form.get('player')
+    player = request.form.get('player').lower()
     logger.info(f"Adding word {players_word}, for player {player}")
     word_length = 0
     global words, history_log, players, status
