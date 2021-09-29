@@ -1,42 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Letter Jam</title>
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+{% extends 'base.html' %}
 
-<form method="POST" action="{{ url_for('letterjam.add_player') }}">
-  <label for="player">Player:</label><br>
-  <input type="text" id="player" name="player"><br>
-  <label for="word">Word:</label><br>
-  <input type="text" id="word" name="word"> <br>
-  <input type="submit" value="Add Player">
-</form>
-<br><br><br><br><br><br>
+{% block title %}Start Page{% endblock %}
+{% block navitems %}
+{% if status.name == 'in_progress' %}
+{% for a_player in players%}
+<li class="nav-item">
+    <a class="nav-link active" href="{{ url_for('letterjam.current_status', player=a_player)}}">{{a_player}}'s Page</a>
+</li>
+{%endfor%}
+{% endif %}
+{% endblock %}
 
-        <table>
-        <tr>
-            <th>History Log</th>
-        </tr>
-        {%for history in history_log%}
-        <tr>
-            <td>{{history}}</td>
-        </tr>
-        {%endfor%}
-    </table>
-<br><br><br><br><br><br>
-<input type="button" onclick="location.href='{{ url_for('letterjam.reset') }}';" value="RESET - DONT PRESS" />
-
-</head>
-<body>
-
-</body>
-</html>
+{% block content %}
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold">Letter Jam</h1>
+    <div class="col-lg-6 mx-auto">
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <form method="POST" action="{{ url_for('letterjam.add_player') }}">
+                <label for="player">Player:</label><br>
+                <input type="text" id="player" name="player"><br>
+                <label for="word">Word:</label><br>
+                <input type="text" id="word" name="word"> <br>
+                <button type="submit" class="btn btn-primary btn-lg px-4 gap-3">Add Player</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
