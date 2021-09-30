@@ -15,12 +15,12 @@
 
 <nav class="navbar navbar-expand navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Letter Jam</a>
+        <a class="navbar-brand" href="{{ url_for('letterjam.index') }}">Letter Jam</a>
         <div class="collapse navbar-collapse" id="navbarsExample02">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('letterjam.index') }}">Start Page</a>
-                </li>
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link active" href="{{ url_for('letterjam.index') }}">Start Page</a>-->
+<!--                </li>-->
                 {% block navitems %}{% endblock %}
             </ul>
         </div>

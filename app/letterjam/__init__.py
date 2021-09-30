@@ -21,16 +21,14 @@ def generate_table_info(words, players, player, status):
     table_info.append(players)  # First row is players
     if status == GameStatus.waiting_to_start:
         return table_info
-    word_length = len(words[0].word)
+    word_length = max([len(a_word.scrambled) for a_word in words])
+    logger.error(f"Word length is now {word_length}")
     # Assume words are in same order as players
     words_reordered_by_guessers = []
     for a_player in players:
         for a_word in words:
             if a_word.guesser == a_player:
                 words_reordered_by_guessers.append(a_word)
-    # print("DEBUGGING")
-    # print(players)
-    # print(words_reordered_by_guessers)
 
     for i, check_word in enumerate(words_reordered_by_guessers):
         # print(check_word.guesser == players[i])
@@ -41,8 +39,17 @@ def generate_table_info(words, players, player, status):
     for row_idx in range(0, word_length):
         row_to_add = []
         for col_idx, a_word in enumerate(words_reordered_by_guessers):
-            if col_idx == current_players_index or row_idx > a_word.revealed_idx:
+            if row_idx > len(a_word.word)-1:
+                letter_to_append = 'bonus'
+                if row_idx < len(a_word.scrambled): # Word is a word that has extra letters
+                    if col_idx != current_players_index:
+                        letter_to_append = a_word.scrambled[row_idx]
+                    else:
+                        letter_to_append = 'Revealed'
+            elif row_idx > a_word.revealed_idx: # Not revealed yet
                 letter_to_append = '$'
+            elif col_idx == current_players_index: # Own players board
+                letter_to_append = 'Revealed'
             else:
                 letter_to_append = a_word.scrambled[row_idx]
             row_to_add.append(letter_to_append)

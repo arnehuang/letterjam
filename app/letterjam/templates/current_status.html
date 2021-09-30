@@ -3,7 +3,11 @@
 {% block title %}Current Status{% endblock %}
 
 {% block content %}
-<h1> Game Status: {{status.name}} </h1>
+{% if status.name != 'in_progress' %}
+<h1> Game Status: {{status.name}}. </h1>
+{% endif %}
+
+<h1> {{player}}'s Board </h1>
 <table class="table">
     <thead>
     <tr>
@@ -19,10 +23,13 @@
     <tr>
         {%for col in row%}
         {% if col == '$' %}
-        <td style="background-color:black"> . </td>
+        <td style="background-color:black">.</td>
+        {% elif col == 'bonus' %}
+        <td style="background-color:brown">.</td>
         {% else %}
         <script>
         console.log("{{col}}");
+
         </script>
         <td>{{col}}</td>
         {% endif %}

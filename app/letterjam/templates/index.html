@@ -5,7 +5,7 @@
 {% if status.name == 'in_progress' %}
 {% for a_player in players%}
 <li class="nav-item">
-    <a class="nav-link active" href="{{ url_for('letterjam.current_status', player=a_player)}}">{{a_player}}'s Page</a>
+    <a class="nav-link active" href="{{ url_for('letterjam.current_status', player=a_player)}}">{{a_player}}'s Board</a>
 </li>
 {%endfor%}
 {% endif %}
@@ -14,6 +14,7 @@
 {% block content %}
 <div class="px-4 py-5 my-5 text-center">
     <h1 class="display-5 fw-bold">Letter Jam</h1>
+    <h2 class="display-5 fw-bold"> Game Status: {{status.name}}. </h2>
     <div class="col-lg-6 mx-auto">
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
             <form method="POST" action="{{ url_for('letterjam.add_player') }}">
