@@ -1,4 +1,5 @@
 import random
+import string
 
 
 class Word:
@@ -13,6 +14,8 @@ class Word:
         return ','.join([str(x) for x in [self.word, self.scrambled, self.guesser, self.revealed_idx]])
 
     def advance(self):
+        if self.revealed_idx >= len(self.word) -1:
+            self.scrambled += random.choice(string.ascii_lowercase)
         self.revealed_idx += 1
 
     def assign_guesser(self, players):

@@ -4,15 +4,24 @@ from .word import Word
 from .game_status import GameStatus
 
 logger = current_app.logger
-players = []
-words = []
-history_log = []
-status = GameStatus.waiting_to_start
+
+state = {
+    'players': [],
+    'words': [],
+    'history_log': [],
+    'status': GameStatus.waiting_to_start,
+    'hint_count': 1
+}
 
 
 @letterjam.route('/')
 def index():
-    global history_log, status, players
+    global state
+    history_log = state.get('history_log')
+    status = state.get('status')
+    players = state.get('players')
+    words = state.get('words')
+    hint_count = state.get('hint_count')
     return render_template('index.html', history_log=history_log, status=status, players=players)
 
 
@@ -23,7 +32,12 @@ def add_player():
     player = request.form.get('player')
     logger.info(f"Adding word {players_word}, for player {player}")
     word_length = 0
-    global words, history_log, players, status
+    global state
+    history_log = state.get('history_log')
+    status = state.get('status')
+    players = state.get('players')
+    words = state.get('words')
+    hint_count = state.get('hint_count')
     if status != GameStatus.waiting_to_start:
         logger.error(f"Cannot add player, Game status is {status.name}")
         flash(f"Cannot add player, Game status is {status.name}")
@@ -42,7 +56,12 @@ def add_player():
 
 @letterjam.route('/current_status/<player>')
 def current_status(player):
-    global words, history_log, players, status
+    global state
+    history_log = state.get('history_log')
+    status = state.get('status')
+    players = state.get('players')
+    words = state.get('words')
+    hint_count = state.get('hint_count')
     from . import generate_table_info
     table_info = generate_table_info(words, players, player, status)
     return render_template('current_status.html',
@@ -55,19 +74,29 @@ def current_status(player):
 
 @letterjam.route('/start_game/<player>', methods=['POST'])
 def _start_game(player):
-    global words, history_log, players, status
+    global state
+    history_log = state.get('history_log')
+    status = state.get('status')
+    players = state.get('players')
+    words = state.get('words')
+    hint_count = state.get('hint_count')
     if status == GameStatus.waiting_to_start:
         from . import start_game
         start_game(words, players)
         history_log.append(f"Game started with players: {players}")
-        status = GameStatus.in_progress
+        state['status'] = GameStatus.in_progress
     # Otherwise, don't attempt to start the game. Just directly go to your player's current status
     return redirect(url_for('letterjam.current_status', player=player))
 
 
 @letterjam.route('/advance/<player>', methods=['POST'])
 def advance(player):
-    global words, history_log
+    global state
+    history_log = state.get('history_log')
+    status = state.get('status')
+    players = state.get('players')
+    words = state.get('words')
+    hint_count = state.get('hint_count')
     for word in words:
         if word.guesser == player:
             word.advance()
@@ -78,19 +107,28 @@ def advance(player):
 @letterjam.route('/hint/<player>', methods=['POST'])
 # Takes ?player=X&hint=Y
 def hint(player):
-    global history_log
+    global state
+    history_log = state.get('history_log')
+    status = state.get('status')
+    players = state.get('players')
+    words = state.get('words')
+    hint_count = state.get('hint_count')
     hint = request.form.get('hint')
-    history_log.append(f"{player} gave hint: {hint}")
+    history_log.append(f"Hint number {hint_count}: {player} says: {hint}.")
+    state['hint_count'] += 1
     # TODO: refresh everyones page - callback in the html to listen for refresh
     return redirect(url_for('letterjam.current_status', player=player))
 
 
 @letterjam.route('/reset')
 def reset():
-    global words, history_log, players, status
-    players = []
-    words = []
-    history_log = []
-    status = GameStatus.waiting_to_start
+    global state
+    state = {
+        'players': [],
+        'words': [],
+        'history_log': [],
+        'status': GameStatus.waiting_to_start,
+        'hint_count': 1
+    }
     logger.warning("RESET!")
     return redirect(url_for('letterjam.index'))
