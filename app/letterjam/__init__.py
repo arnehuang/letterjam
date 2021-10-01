@@ -45,7 +45,7 @@ def generate_table_info(state, player):
                 letter_to_append = 'bonus'
                 if row_idx < len(a_word.scrambled):  # Word is a word that has extra letters
                     if col_idx != current_players_index:
-                        letter_to_append = a_word.scrambled[row_idx]
+                        letter_to_append = a_word.scrambled[row_idx].upper()
                     else:
                         letter_to_append = 'Revealed'
             elif row_idx > a_word.revealed_idx:  # Not revealed yet
@@ -53,7 +53,7 @@ def generate_table_info(state, player):
             elif col_idx == current_players_index:  # Own players board
                 letter_to_append = 'Revealed'
             else:
-                letter_to_append = a_word.scrambled[row_idx]
+                letter_to_append = a_word.scrambled[row_idx].upper()
             row_to_add.append(letter_to_append)
         table_info.append(row_to_add)
     logger.info(f"Table info is: {table_info}")
