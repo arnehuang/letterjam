@@ -34,10 +34,10 @@
 <form method="POST" action="{{ url_for('letterjam.hint', player_name=player_name) }}">
     <label for="hint">Hint:</label><br>
     <input type="text" id="hint" name="hint"><br>
-    <input type="submit" value="Give Hint" onclick="confirm('Give Hint?')">
+    <input type="submit" value="Give Hint" onclick="return confirm('Give Hint?')">
 </form>
 <form method="POST" action="{{ url_for('letterjam.advance', player_name=player_name) }}">
-    <input type="submit" value="advance" onclick="confirm('Advance?')">
+    <input type="submit" value="advance" onclick="return confirm('Advance?');">
 </form>
 
 {% endif %}
