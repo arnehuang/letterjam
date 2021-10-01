@@ -37,11 +37,11 @@
     </tr>
     {%endfor%}
     {% else %}
-    {%for player in table_info[0]%}
     <tr>
+        {%for player in table_info[0]%}
         <td>Joined</td>
+        {%endfor%}
     </tr>
-    {%endfor%}
     {% endif %}
     </tbody>
 </table>
