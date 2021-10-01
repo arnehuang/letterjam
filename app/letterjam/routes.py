@@ -15,11 +15,16 @@ state = State(players=[],
               hint_tokens=None)
 
 
+@letterjam.route('/history_log')
+def history_log():
+    global state
+    return render_template('history_log.html', history_log=state.history_log)
+
+
 @letterjam.route('/')
 def index():
     global state
     return render_template('index.html',
-                           history_log=state.history_log,
                            status=state.status,
                            players=state.players)
 
@@ -55,16 +60,20 @@ def add_player():
     return redirect(url_for('letterjam.current_status', player_name=player.name))
 
 
-@letterjam.route('/current_status/<player_name>')
-def current_status(player_name):
+@letterjam.route('/game_board/<player_name>')
+def game_board(player_name):
     global state
     player = list(filter(lambda player: player.name == player_name, state.players))[0]
     from . import generate_table_info
     table_info = generate_table_info(state, player)
+    return render_template('game_board.html', table_info=table_info, status=state.status)
+
+
+@letterjam.route('/current_status/<player_name>')
+def current_status(player_name):
+    global state
     return render_template('current_status.html',
-                           table_info=table_info,
-                           history_log=state.history_log,
-                           player=player,
+                           player_name=player_name,
                            status=state.status
                            )
 

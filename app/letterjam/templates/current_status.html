@@ -7,56 +7,36 @@
 <h1> Game Status: {{status.name}}. </h1>
 {% endif %}
 
-<h1> {{player.name}}'s Board </h1>
-<table class="table">
-    <thead>
-    <tr>
-        {%for player_name in table_info[0]%}
-        <th>{{player_name}}</th>
-        {%endfor%}
-    </tr>
-    </thead>
-    <tbody>
+<h1> {{player_name}}'s Board </h1>
 
-    {% if status.name == 'in_progress' %}
-    {%for row in table_info[1:]%}
-    <tr>
-        {%for col in row%}
-        {% if col == '$' %}
-        <td style="background-color:black">.</td>
-        {% elif col == 'bonus' %}
-        <td style="background-color:brown">.</td>
-        {% else %}
-        <script>
-        console.log("{{col}}");
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-        </script>
-        <td>{{col}}</td>
-        {% endif %}
-        {%endfor%}
-    </tr>
-    {%endfor%}
-    {% else %}
-    <tr>
-        {%for player in table_info[0]%}
-        <td>Joined</td>
-        {%endfor%}
-    </tr>
-    {% endif %}
-    </tbody>
-</table>
+<script>
+    $(document).ready(refresh_game_board);
+
+    setInterval(refresh_game_board, 3000);
+
+    function refresh_game_board() {
+       $.ajax("{{ url_for('letterjam.game_board', player_name=player_name) }}").done(function (reply) {
+                  $('#game_board').html(reply);
+                  });
+    };
+</script>
+
+<div id="game_board"></div>
+
 {% if status.name == 'waiting_to_start' %}
-<form method="POST" action="{{ url_for('letterjam._start_game', player_name=player.name) }}">
+<form method="POST" action="{{ url_for('letterjam._start_game', player_name=player_name) }}">
     <input type="submit" value="Start Game">
 </form>
 {% else %}
 
-<form method="POST" action="{{ url_for('letterjam.hint', player_name=player.name) }}">
+<form method="POST" action="{{ url_for('letterjam.hint', player_name=player_name) }}">
     <label for="hint">Hint:</label><br>
     <input type="text" id="hint" name="hint"><br>
     <input type="submit" value="Give Hint" onclick="confirm('Give Hint?')">
 </form>
-<form method="POST" action="{{ url_for('letterjam.advance', player_name=player.name) }}">
+<form method="POST" action="{{ url_for('letterjam.advance', player_name=player_name) }}">
     <input type="submit" value="advance" onclick="confirm('Advance?')">
 </form>
 

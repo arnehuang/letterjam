@@ -1,0 +1,36 @@
+<table class="table">
+    <thead>
+    <tr>
+        {%for player_name in table_info[0]%}
+        <th>{{player_name}}</th>
+        {%endfor%}
+    </tr>
+    </thead>
+    <tbody>
+
+    {% if status.name == 'in_progress' %}
+    {%for row in table_info[1:]%}
+    <tr>
+        {%for col in row%}
+        {% if col == '$' %}
+        <td style="background-color:black">.</td>
+        {% elif col == 'bonus' %}
+        <td style="background-color:brown">.</td>
+        {% else %}
+        <script>
+
+        </script>
+        <td>{{col}}</td>
+        {% endif %}
+        {%endfor%}
+    </tr>
+    {%endfor%}
+    {% else %}
+    <tr>
+        {%for player in table_info[0]%}
+        <td>Joined</td>
+        {%endfor%}
+    </tr>
+    {% endif %}
+    </tbody>
+</table>

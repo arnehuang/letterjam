@@ -1,4 +1,5 @@
 from flask import Blueprint, current_app
+# import functools
 
 letterjam = Blueprint('letterjam', __name__, template_folder='templates')
 from . import routes
@@ -16,6 +17,7 @@ def start_game(words, players):
     logger.info("Successfully assigned word guessers")
 
 
+# @functools.lru_cache(maxsize=64)
 def generate_table_info(state, player):
     words, players, status = state.words, state.players, state.status
     table_info = list()
@@ -39,16 +41,16 @@ def generate_table_info(state, player):
     for row_idx in range(0, word_length):
         row_to_add = []
         for col_idx, a_word in enumerate(words_reordered_by_guessers):
-            if row_idx > len(a_word.word)-1:
+            if row_idx > len(a_word.word) - 1:
                 letter_to_append = 'bonus'
-                if row_idx < len(a_word.scrambled): # Word is a word that has extra letters
+                if row_idx < len(a_word.scrambled):  # Word is a word that has extra letters
                     if col_idx != current_players_index:
                         letter_to_append = a_word.scrambled[row_idx]
                     else:
                         letter_to_append = 'Revealed'
-            elif row_idx > a_word.revealed_idx: # Not revealed yet
+            elif row_idx > a_word.revealed_idx:  # Not revealed yet
                 letter_to_append = '$'
-            elif col_idx == current_players_index: # Own players board
+            elif col_idx == current_players_index:  # Own players board
                 letter_to_append = 'Revealed'
             else:
                 letter_to_append = a_word.scrambled[row_idx]

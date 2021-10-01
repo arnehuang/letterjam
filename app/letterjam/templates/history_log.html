@@ -1,0 +1,13 @@
+<!-- History Log -->
+<div>
+    <table class="table">
+        <tr>
+            <th>History Log</th>
+        </tr>
+        {%for history in history_log|reverse%}
+        <tr>
+            <td>{{history}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+</div>

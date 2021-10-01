@@ -18,9 +18,9 @@
         <a class="navbar-brand" href="{{ url_for('letterjam.index') }}">Letter Jam</a>
         <div class="collapse navbar-collapse" id="navbarsExample02">
             <ul class="navbar-nav me-auto">
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link active" href="{{ url_for('letterjam.index') }}">Start Page</a>-->
-<!--                </li>-->
+                <!--                <li class="nav-item">-->
+                <!--                    <a class="nav-link active" href="{{ url_for('letterjam.index') }}">Start Page</a>-->
+                <!--                </li>-->
                 {% block navitems %}{% endblock %}
             </ul>
         </div>
@@ -35,17 +35,22 @@
     {% block content %}{% endblock %}
 
     <!-- History Log -->
-    <table class="table">
-        <tr>
-            <th>History Log</th>
-        </tr>
-        {%for history in history_log|reverse%}
-        <tr>
-            <td>{{history}}</td>
-        </tr>
-        {%endfor%}
-    </table>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
+    <script>
+    $(document).ready(refresh_history);
+
+    setInterval(refresh_history, 3000);
+
+    function refresh_history() {
+       $.ajax("{{ url_for('letterjam.history_log') }}").done(function (reply) {
+                  $('#history_log').html(reply);
+                  });
+    };
+
+
+    </script>
+    <div id="history_log"></div>
     <!-- Reset Button -->
 
     <div>
