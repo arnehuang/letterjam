@@ -1,24 +1,25 @@
 import random
 import string
+from .player import Player
 
 
 class Word:
-    def __init__(self, word, player):
+    def __init__(self, word: str, player: Player, guesser: Player = None):
         self.word = word.upper()
         self.scrambled = Word.scramble(word)
         self.creator = player
-        self.guesser = None
+        self.guesser = guesser
         self.revealed_idx = 0
 
     def __repr__(self):
-        return ','.join([str(x) for x in [self.word, self.scrambled, self.guesser, self.revealed_idx]])
+        return "Word" + ','.join([str(x) for x in [self.word, self.scrambled, self.guesser, self.revealed_idx]])
 
     def advance(self):
-        if self.revealed_idx >= len(self.word) -1:
+        if self.revealed_idx >= len(self.word) - 1:
             self.scrambled += random.choice(string.ascii_lowercase)
         self.revealed_idx += 1
 
-    def assign_guesser(self, players):
+    def assign_guesser(self, players: [Player]):
         # TODO: Assign a random guesser instead of a fixed one
         if self.guesser is None:
             self_idx = players.index(self.creator)

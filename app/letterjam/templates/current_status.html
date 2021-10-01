@@ -7,12 +7,12 @@
 <h1> Game Status: {{status.name}}. </h1>
 {% endif %}
 
-<h1> {{player}}'s Board </h1>
+<h1> {{player.name}}'s Board </h1>
 <table class="table">
     <thead>
     <tr>
-        {%for player in table_info[0]%}
-        <th>{{player}}</th>
+        {%for player_name in table_info[0]%}
+        <th>{{player_name}}</th>
         {%endfor%}
     </tr>
     </thead>
@@ -46,18 +46,18 @@
     </tbody>
 </table>
 {% if status.name == 'waiting_to_start' %}
-<form method="POST" action="{{ url_for('letterjam._start_game', player=player) }}">
+<form method="POST" action="{{ url_for('letterjam._start_game', player_name=player.name) }}">
     <input type="submit" value="Start Game">
 </form>
 {% else %}
 
-<form method="POST" action="{{ url_for('letterjam.hint', player=player) }}">
+<form method="POST" action="{{ url_for('letterjam.hint', player_name=player.name) }}">
     <label for="hint">Hint:</label><br>
     <input type="text" id="hint" name="hint"><br>
-    <input type="submit" value="Give Hint">
+    <input type="submit" value="Give Hint" onclick="confirm('Give Hint?')">
 </form>
-<form method="POST" action="{{ url_for('letterjam.advance', player=player) }}">
-    <input type="submit" value="advance">
+<form method="POST" action="{{ url_for('letterjam.advance', player_name=player.name) }}">
+    <input type="submit" value="advance" onclick="confirm('Advance?')">
 </form>
 
 {% endif %}

@@ -16,13 +16,13 @@ def start_game(words, players):
     logger.info("Successfully assigned word guessers")
 
 
-def generate_table_info(words, players, player, status):
+def generate_table_info(state, player):
+    words, players, status = state.words, state.players, state.status
     table_info = list()
-    table_info.append(players)  # First row is players
+    table_info.append([a_player.name for a_player in players])  # First row is player names
     if status == GameStatus.waiting_to_start:
         return table_info
     word_length = max([len(a_word.scrambled) for a_word in words])
-    logger.error(f"Word length is now {word_length}")
     # Assume words are in same order as players
     words_reordered_by_guessers = []
     for a_player in players:

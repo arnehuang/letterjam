@@ -50,7 +50,7 @@
 
     <div>
         <button type="button" class="btn btn-outline-secondary btn-lg px-4"
-                onclick="location.href='{{ url_for('letterjam.reset') }}';">Reset Game
+                onclick="if (confirm('Reset the Game?')){location.href='{{ url_for('letterjam.reset') }}';}">Reset Game
         </button>
     </div>
 
