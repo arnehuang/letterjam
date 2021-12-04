@@ -28,9 +28,8 @@ function LandingPage() {
 
     return (
         <div className="App" >
-            {/* <NavBar {... { show_players: true }} /> */}
             <div
-                className='p-5 text-center App-bg'
+                className='text-center App-bg'
                 style={{
                     backgroundImage: `url(${process.env.PUBLIC_URL}/img/enter.png)`
                 }}
@@ -46,10 +45,13 @@ function LandingPage() {
                             <Form.Label>Word</Form.Label>
                             <Form.Control type="word" placeholder="" />
                         </Form.Group>
-                        <Button variant="primary" type="submit" href={`${process.env.PUBLIC_URL}/player`}>
+                        <Button className="Form-text" variant="primary" type="submit" href={`${process.env.PUBLIC_URL}/player`}>
                             Play
                         </Button>
                     </Form>
+                </div>
+                <div className="App-footer Form-text">
+                    <NavBar {... { show_players: true }} />
                 </div>
             </div>
         </div>

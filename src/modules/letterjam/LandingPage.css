@@ -11,7 +11,7 @@
 }
 
 .App-logo {
-  height: 25vmin;
+  height: 23vmin;
   pointer-events: none;
   padding-bottom: 30px;
 }
@@ -23,13 +23,16 @@
 }
 
 .Form-text {
+  font-family: cursive;
   color: black;
   font-size: calc(10px + 2vmin);
   font-weight: bolder;
 }
 
-.App-content {
-  /* padding-top: 700px; */
+.App-footer {
+  font-size: calc(10px + 1vmin);
+  font-weight: bolder;
+  text-align: center;
 }
 
 @keyframes App-logo-spin {

@@ -5,7 +5,7 @@ import { Nav, Navbar } from 'react-bootstrap';
 import io from 'socket.io-client';
 
 
-export default function NavBar(props: {show_players: boolean}) {
+export default function NavBar(props: { show_players: boolean }) {
     const [state, setState] = useState({
         players: [] as any[],
         loading: true,
@@ -23,23 +23,32 @@ export default function NavBar(props: {show_players: boolean}) {
 
     useEffect(() => {
         fetch('/players').then(res => res.json()).then(data => {
-        updatePlayers(data);
+            updatePlayers(data);
         });
     }, []);
 
     var items: string[] = [];
-    if (props.show_players === true) {
-        items = items.concat(state.players);
+    items = items.concat(state.players);
+    if (props.show_players === false) {
+        return (
+            <Navbar >
+                <LinkContainer key={0} to="/">
+                    <Nav.Link>Letter Jam</Nav.Link>
+                </LinkContainer>
+            </Navbar>
+        );
     }
-    return (
-        <Navbar style={{backgroundColor: "#282c34"}}>
-            <LinkContainer key={0} to="/">
-                <Nav.Link>Letter Jam</Nav.Link>
-            </LinkContainer>
-            {items.map((player, index) =>
-                <LinkContainer key={index} to={`/current_status/${JSON.parse(player)._name}`}>
-                    <Nav.Link>{JSON.parse(player)._name}</Nav.Link>
-                </LinkContainer>)}
-        </Navbar>
-    )
+    else {
+        return (
+            <Navbar >
+
+                {
+                    items.map((player, index) =>
+                        <LinkContainer key={index} to={`/current_status/${JSON.parse(player)._name}`}>
+                            <Nav.Link>{JSON.parse(player)._name}</Nav.Link>
+                        </LinkContainer>)
+                }
+            </Navbar>
+        )
+    }
 }
