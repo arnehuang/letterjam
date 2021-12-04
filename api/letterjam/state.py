@@ -44,6 +44,15 @@ class State:
         SAVE_PATH = (State.DIR_NAME).joinpath(str(self.hint_count))
         pickle.dump(self, open(SAVE_PATH, 'wb'))
 
+    def history_log_for_player(self, player):
+        # History log is a list of strings
+        # Search each string for hints
+        # If a log entry is a hint, replace players names with their letters
+        # This needs to be done  after "says:". 
+        # The hint will be formatted as translated_hint, player_to_hide_from
+        # 
+        return self.history_log
+
     @staticmethod
     def load(version):
         return pickle.load(open((State.DIR_NAME).joinpath(version), 'rb'))

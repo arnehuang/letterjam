@@ -1,5 +1,4 @@
 from flask import Blueprint, current_app
-# import functools
 
 letterjam = Blueprint('letterjam', __name__, template_folder='templates')
 from . import routes
