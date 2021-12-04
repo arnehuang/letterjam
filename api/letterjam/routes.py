@@ -5,6 +5,7 @@ from .game_status import GameStatus
 from .player import Player
 # from .hint_token import HintTokens TODO: refactor to hint tokens?
 from .state import State
+import json
 
 logger = current_app.logger
 
@@ -26,7 +27,8 @@ def players():
     global state
     # List current players
     if request.method == 'GET':
-        return jsonify(state.players), 200
+        return jsonify([json.dumps(vars(player)) for player in [Player('arne'), Player('ellen')]]), 200
+        return jsonify([json.dumps(vars(player)) for player in state.players]), 200
     # Add a new player
     if request.method == 'POST':
         try:
