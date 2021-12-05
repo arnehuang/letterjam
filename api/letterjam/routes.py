@@ -27,13 +27,14 @@ def players():
     global state
     # List current players
     if request.method == 'GET':
-        return jsonify([json.dumps(vars(player)) for player in [Player('arne'), Player('ellen')]]), 200
-        return jsonify([json.dumps(vars(player)) for player in state.players]), 200
+        return jsonify([player.name for player in state.players]), 200
     # Add a new player
     if request.method == 'POST':
         try:
-            player = Player(request.form.get('player'))
-            word_to_add = Word(request.form.get('word'), player)
+            params = request.get_json() 
+            logger.info('delete me: ' + str(params))
+            player = Player(params.get('player'))
+            word_to_add = Word(params.get('word'), player)
             player.word = word_to_add
         except Exception as e:
             logger.error(e)

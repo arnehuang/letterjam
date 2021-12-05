@@ -20,7 +20,8 @@ def start_game(words, players):
 def generate_table_info(state, player):
     words, players, status = state.words, state.players, state.status
     table_info = list()
-    table_info.append([a_player.name for a_player in players])  # First row is player names
+    table_info.append([a_player.name
+                       for a_player in players])  # First row is player names
     if status == GameStatus.waiting_to_start:
         return table_info
     word_length = max([len(a_word.scrambled) for a_word in words])
@@ -42,7 +43,8 @@ def generate_table_info(state, player):
         for col_idx, a_word in enumerate(words_reordered_by_guessers):
             if row_idx > len(a_word.word) - 1:
                 letter_to_append = 'bonus'
-                if row_idx < len(a_word.scrambled):  # Word is a word that has extra letters
+                if row_idx < len(a_word.scrambled
+                                 ):  # Word is a word that has extra letters
                     if col_idx != current_players_index:
                         letter_to_append = a_word.scrambled[row_idx].upper()
                     else:

@@ -7,7 +7,7 @@ import io from 'socket.io-client';
 
 export default function NavBar(props: { show_players: boolean }) {
     const [state, setState] = useState({
-        players: [] as any[],
+        players: [] as string[],
         loading: true,
     });
 
@@ -44,8 +44,8 @@ export default function NavBar(props: { show_players: boolean }) {
 
                 {
                     items.map((player, index) =>
-                        <LinkContainer key={index} to={`/current_status/${JSON.parse(player)._name}`}>
-                            <Nav.Link>{JSON.parse(player)._name}</Nav.Link>
+                        <LinkContainer key={index} to={`/current_status/${player}`}>
+                            <Nav.Link>{player}</Nav.Link>
                         </LinkContainer>)
                 }
             </Navbar>
