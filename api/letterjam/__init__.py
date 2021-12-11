@@ -17,46 +17,43 @@ def start_game(words, players):
     logger.info("Successfully assigned word guessers")
 
 
-# @functools.lru_cache(maxsize=64)
 def generate_table_info(state, player: Player):
     words, players, status = state.words, state.players, state.status
-    table_info = list()
-    table_info.append([a_player.name
-                       for a_player in players])  # First row is player names
+    table_info = { a_player.name : []
+                       for a_player in players}
     if status == GameStatus.waiting_to_start:
         return table_info
     word_length = max([len(a_word.scrambled) for a_word in words])
-    # Assume words are in same order as players
-    words_reordered_by_guessers = []
-    for a_player in players:
-        for a_word in words:
-            if a_word.guesser == a_player:
-                words_reordered_by_guessers.append(a_word)
-
+    
+    words_reordered_by_guessers = [
+        a_word for a_player in players for a_word in words if a_word.guesser == a_player
+    ]
+    # for a_player in players:
+    #     for a_word in words:
+    #         if a_word.guesser == a_player:
+    #             words_reordered_by_guessers.append(a_word)
+    # TODO: remove this once i've verified the above works
     for i, check_word in enumerate(words_reordered_by_guessers):
-        # print(check_word.guesser == players[i])
         assert check_word.guesser == players[i]
 
     current_players_index = players.index(player)
     # Generate rows below
-    for row_idx in range(0, word_length):
-        row_to_add = []
-        for col_idx, a_word in enumerate(words_reordered_by_guessers):
-            if row_idx > len(a_word.word) - 1:
-                letter_to_append = 'bonus'
-                if row_idx < len(a_word.scrambled
+    for letter_idx in range(0, word_length):        
+        for player_idx, a_word in enumerate(words_reordered_by_guessers):
+            if letter_idx > len(a_word.word) - 1:
+                letter_to_append = 'BONUS'
+                if letter_idx < len(a_word.scrambled
                                  ):  # Word is a word that has extra letters
-                    if col_idx != current_players_index:
-                        letter_to_append = a_word.scrambled[row_idx].upper()
+                    if player_idx != current_players_index:
+                        letter_to_append = a_word.scrambled[letter_idx].upper()
                     else:
-                        letter_to_append = 'Revealed'
-            elif row_idx > a_word.revealed_idx:  # Not revealed yet
-                letter_to_append = '$'
-            elif col_idx == current_players_index:  # Own players board
-                letter_to_append = 'Revealed'
+                        letter_to_append = 'REVEALED'
+            elif letter_idx > a_word.revealed_idx:  # Not revealed yet
+                letter_to_append = 'BLANK'
+            elif player_idx == current_players_index:  # Own players board
+                letter_to_append = 'REVEALED'
             else:
-                letter_to_append = a_word.scrambled[row_idx].upper()
-            row_to_add.append(letter_to_append)
-        table_info.append(row_to_add)
+                letter_to_append = a_word.scrambled[letter_idx].upper()
+            table_info[players[player_idx].name].append(letter_to_append)
     logger.info(f"Table info is: {table_info}")
     return table_info

@@ -24,7 +24,7 @@ class Word:
         self.revealed_idx += 1
         # socketio.emit('word advanced', {}, namespace='/word')
 
-    def assign_guesser(self, players: [Player]):
+    def assign_guesser(self, players):
         # TODO: Assign a random guesser instead of a fixed one
         if self.guesser is None:
             self_idx = players.index(self.creator)
