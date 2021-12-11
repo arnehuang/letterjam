@@ -3,6 +3,7 @@ from flask import Blueprint, current_app
 letterjam = Blueprint('letterjam', __name__, template_folder='templates')
 from . import routes
 from .game_status import GameStatus
+from .player import Player
 
 logger = current_app.logger
 
@@ -17,7 +18,7 @@ def start_game(words, players):
 
 
 # @functools.lru_cache(maxsize=64)
-def generate_table_info(state, player):
+def generate_table_info(state, player: Player):
     words, players, status = state.words, state.players, state.status
     table_info = list()
     table_info.append([a_player.name

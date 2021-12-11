@@ -1,6 +1,10 @@
 import random
 import string
 from .player import Player
+# from flask import current_app
+# from flask_socketio import SocketIO, emit
+# socketio = SocketIO(current_app)
+# logger = current_app.logger
 
 
 class Word:
@@ -18,6 +22,7 @@ class Word:
         if self.revealed_idx >= len(self.word) - 1:
             self.scrambled += random.choice(string.ascii_lowercase)
         self.revealed_idx += 1
+        # socketio.emit('word advanced', {}, namespace='/word')
 
     def assign_guesser(self, players: [Player]):
         # TODO: Assign a random guesser instead of a fixed one

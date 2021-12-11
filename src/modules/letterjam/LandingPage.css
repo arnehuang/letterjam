@@ -23,7 +23,7 @@
 }
 
 .Form-text {
-  font-family: cursive;
+  font-family: "Iowan Old Style", "Sitka Text", Palatino, "Book Antiqua", serif  ;
   color: black;
   font-size: calc(10px + 2vmin);
   font-weight: bolder;

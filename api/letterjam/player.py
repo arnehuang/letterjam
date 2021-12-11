@@ -15,5 +15,12 @@ class Player:
     def word(self, new_word):
         self._word = new_word
 
+    @staticmethod
+    def find_player_in_list(player_name, list_of_players):
+        for player_in_list in list_of_players:
+            if player_in_list.name == player_name:
+                return player_in_list
+        return None
+
     def __repr__(self):
         return f"Player: {self.name}"

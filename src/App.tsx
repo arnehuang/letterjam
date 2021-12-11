@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import LandingPage from './modules/letterjam/LandingPage';
 import PlayerPage from './modules/letterjam/PlayerPage';
-import { BrowserRouter, Link, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   useEffect(() => {

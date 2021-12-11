@@ -1,14 +1,29 @@
 import './LandingPage.css';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import NavBar from '../../components/NavBar';
-import io from 'socket.io-client';
+// import AlertError from '../../components/AlertError';
+// import io from 'socket.io-client';
 import { Alert, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 
 
 function LandingPage() {
+    // var socket = io('http://' + document.domain + ':3000');
+    // // var socket = io();
+    // socket.on('connect', function() {
+    //     socket.emit('connection sent', {data: 'I\'m connected!'});
+    //     console.log('connection sent')
+    // });
+
+    // socket.on('history updated', function(msg) {
+    // // socket.on('status updated', function(msg) {
+    //     console.log("Status updated to: " + msg.status);
+    // });
+
+    const hasFetchedData = useRef(false);
+
     const [state, setState] = useState({
         status: '',
         loading: true,
@@ -16,23 +31,32 @@ function LandingPage() {
         errorMessage: '',
     });
 
-    const updateStatus = (status: string) => {
-        setState({
-            ...state,
-            status: status,
-            loading: false,
-        });
-    };
     const navigate = useNavigate();
 
 
     useEffect(() => {
-        fetch('/status').then(res => res.json()).then(data => {
-            updateStatus(data);
-        });
-    }, []);
+        const updateStatus = (status: string) => {
+            console.log('updating status')
+            setState({
+                ...state,
+                status: status,
+                loading: false,
+            });
+        };
+    
+        if (!hasFetchedData.current) {
+            fetch('/status').then(res => res.json()).then(data => {
+                updateStatus(data);
+            });
+            hasFetchedData.current = true;
+        }
+    }, [state]);
 
     const alertPopup = () => {
+        // return (
+        //     <AlertError {..., {show={state.showError},
+        //      message={state.errorMessage}}} />
+        // );
         if (state.showError) {
             return (
                 <Alert variant="danger" onClose={() => setState({ ...state, showError: false })} dismissible
@@ -47,7 +71,7 @@ function LandingPage() {
 
     const addPlayerForm = () => {
         if (state.status === 'in_progress') {
-            return
+            return (<h1>Game is in progress</h1>)
         }
         return (
             <Form className="Form-group" onSubmit={handleAddPlayer}>

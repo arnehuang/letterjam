@@ -1,31 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './NavBar.css';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Nav, Navbar } from 'react-bootstrap';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 
 
 export default function NavBar(props: { show_players: boolean }) {
+    const hasFetchedData = useRef(false);
+
     const [state, setState] = useState({
         players: [] as string[],
         loading: true,
     });
 
-    const updatePlayers = (players: any[]) => {
-        if (players.length > 0) {
-            setState({
-                ...state,
-                players: players,
-                loading: false
-            })
-        }
-    };
-
+    // Component updated -> calls this. 
     useEffect(() => {
-        fetch('/players').then(res => res.json()).then(data => {
-            updatePlayers(data);
-        });
-    }, []);
+        if (!hasFetchedData.current) {
+            fetch('/players').then(res => res.json()).then(data => {
+                if (data.length > 0) {
+                    setState({
+                        ...state,
+                        players: data,
+                        loading: false
+                    })
+                };
+            });
+            hasFetchedData.current = true;
+        }
+    }, [state]);
 
     var items: string[] = [];
     items = items.concat(state.players);
@@ -41,10 +43,9 @@ export default function NavBar(props: { show_players: boolean }) {
     else {
         return (
             <Navbar >
-
                 {
                     items.map((player, index) =>
-                        <LinkContainer key={index} to={`/current_status/${player}`}>
+                        <LinkContainer key={index} to={`/player/${player}`}>
                             <Nav.Link>{player}</Nav.Link>
                         </LinkContainer>)
                 }
