@@ -1,8 +1,48 @@
 
 .game-board {
-  padding: 12px 8px 8px 12px;
-  max-width: 30%;
+  margin: 0px 24px 0px 0px;
   border: 1px solid #c4c4c4;
   background: #dad9d9e5;
   border-radius: 10px;
 }
+
+.game-board-header {
+  text-align: center;
+}
+
+.game-board-players {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-board {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.player-board-header {
+  margin-left: 8px;
+  font-family: "Iowan Old Style", "Sitka Text", Palatino, "Book Antiqua", serif  ;
+  color: black;
+  font-size: calc(10px + 2vmin);
+  /* font-weight: bolder; */
+  min-width: 150px;
+}
+
+.letter-container {
+  font-size: calc(10px + 2vmin);
+  font-weight: bold;
+  background: url("/src/assets/img/blank_tile.jpg") center; 
+  background-size: cover;
+  border: 1px solid black;
+  border-radius: 4px;
+  min-width: 40px;
+  min-height: 40px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+}
+

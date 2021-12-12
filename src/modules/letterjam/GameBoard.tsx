@@ -3,12 +3,43 @@ import { useState, useEffect } from 'react';
 
 function generateRandomLetter() {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-  
+
     return alphabet[Math.floor(Math.random() * alphabet.length)]
-  };
+};
 
+const renderPlayerBoard = (player: string, playerBoard: string[], onclick: () => void) => {
+    return (
+        <div key={`player-board-${player}`} className="player-board">
+            < div className="player-board-header">
+                {player}
+            </div>
+            {playerBoard.map((letter, index) => {
+                return renderLetter(letter, index, player, onclick)
+            })}
+        </div>
+    )
+};
 
-function GameBoard(playerName: string, errorHandler: Function) {
+const renderLetter = (letter: string, index: number, player: string, onclick: Function) => {
+    return (
+        <div
+            className="letter-container"
+            key={`letter-container-${player}-${index}`}
+            onClick={onclick(letter, player)}
+        >
+
+            {
+                {
+                    'BLANK': '?',
+                    'REVEALED': '*',
+                    'BONUS': generateRandomLetter(),
+                }[letter] || letter
+            }
+        </div>
+    )
+};
+
+function GameBoard(playerName: string, errorHandler: Function, onclick= () => void 0) {
 
     const [gameBoard, setGameBoard] = useState<Record<string, string[]>>({});
 
@@ -16,7 +47,7 @@ function GameBoard(playerName: string, errorHandler: Function) {
         updateGameBoard();
         const interval = setInterval(() => {
             updateGameBoard();
-        }, 30000); //TODO: drop this to 2 seconds when we have a real server
+        }, 200000); 
         return () => clearInterval(interval);
     }, []);
 
@@ -46,45 +77,14 @@ function GameBoard(playerName: string, errorHandler: Function) {
             });
     };
 
-    const renderPlayerBoard = (player: string, playerBoard: string[]) => {
-        console.log(`Player is ${player}, board is ${playerBoard}`)
-        return (
-            <div key={`player-board-${player}`} className="player-board">
-                < div className="player-board-header">
-                    {player}
-                </div>
-                {playerBoard.map((letter, index) => {
-                    return renderLetter(letter, index)
-                })}
-            </div>
-        )
-    };
-
-    const renderLetter = (letter: string, index: number) => {
-        return (
-            <div className="letter-container">
-                <div className="letter-container-letter">
-                    {
-                        {
-                            'BLANK': '?',
-                            'REVEALED': '*',
-                            'BONUS': generateRandomLetter(),
-                        }[letter] || letter
-                    }
-                </div>
-            </div>
-        )
-    };
-
     return (
-
         <div className="game-board">
             <div className="game-board-header">
                 <h3>Board State</h3>
             </div>
             <div className="game-board-players">
                 {Object.keys(gameBoard).map((player) => {
-                    return (renderPlayerBoard(player, gameBoard[player]))
+                    return (renderPlayerBoard(player, gameBoard[player], onclick))
                 })}
             </div>
         </div>

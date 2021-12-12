@@ -7,6 +7,7 @@ import { Alert, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import GameBoard from './GameBoard';
 import HistoryLog from './HistoryLog';
+import HintPopup from './HintPopup';
 
 function PlayerPage() {
     const [state, setState] = useState({
@@ -14,7 +15,9 @@ function PlayerPage() {
         errorMessage: '',
         loading: true,
     });
-    const [status, setStatus] = useState('')
+    const [status, setStatus] = useState('');
+    const [modalShow, setModalShow] = useState(false);
+
 
     useEffect(() => {
         updateStatus();
@@ -27,9 +30,9 @@ function PlayerPage() {
     const playerName = useParams().id || 'Unknown Player';
     console.log(state);
 
-    function errorHandler (error: string) {
+    function errorHandler(error: string) {
         return setState({
-            ...state, 
+            ...state,
             showError: true,
             errorMessage: error,
         });
@@ -87,13 +90,17 @@ function PlayerPage() {
                 {GameBoard(playerName, errorHandler)}
                 <div className="actions">
                     <Button
+                        className='hint-button'
                         variant="primary"
-                        onClick={() => { handleHint() }}
+                        size="lg"
+                        onClick={() => { setModalShow(true) }}
                     >
                         Hint
                     </Button>
                     <Button
+                        className='success-button'
                         variant="success"
+                        size="lg"
                         onClick={() => { handleAdvance() }}
                     >
                         Advance
@@ -102,17 +109,13 @@ function PlayerPage() {
             </div>
         )
     };
-    const handleHint = () => {
-        // new hint interface to make it easier - click existing players letters and preview hint
-        // Hint.tsx
-    };
 
     const handleAdvance = () => {
     };
 
     // Must render the game board first other wise React hooks are out of order
     const renderedGameBoard = renderGame();
-    
+
     return (
         <div
             className="bg"
@@ -125,12 +128,19 @@ function PlayerPage() {
                 {
                     status === 'waiting_to_start' &&
                     <Button
+                        className="start-game-button"
                         variant="success"
                         onClick={() => { _startGame() }}
                     >
                         Start Game
                     </Button>
                 }
+                <HintPopup
+                    hintgiver={playerName}
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                    errorhandler={errorHandler}
+                />
                 {status === 'in_progress' &&
                     renderedGameBoard
                 }

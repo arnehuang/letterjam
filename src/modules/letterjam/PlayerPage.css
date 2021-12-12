@@ -7,9 +7,32 @@ html, body {
     height: 100%;
   }
 
+
+  .start-game-button {
+    max-height: 40px;
+  }
+
   .player-page-contents {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     min-height: 600px;
+  }
+
+  .game-container{
+    /* todo: max width to not run into history log? */
+    width: 100%;
+    max-width: 678px;
+  }
+  .actions{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 8px;
+    justify-content: center;
+  }
+
+  .hint-button{
+    margin-left: 10px;
+    margin-right: 8px
   }
