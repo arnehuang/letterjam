@@ -5,12 +5,8 @@ import NavBar from '../../components/NavBar';
 // import io from 'socket.io-client';
 import { Alert, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-
-function generateRandomLetter() {
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-  
-    return alphabet[Math.floor(Math.random() * alphabet.length)]
-  };
+import GameBoard from './GameBoard';
+import HistoryLog from './HistoryLog';
 
 function PlayerPage() {
     const [state, setState] = useState({
@@ -19,24 +15,24 @@ function PlayerPage() {
         loading: true,
     });
     const [status, setStatus] = useState('')
-    const [historyLog, setHistoryLog] = useState<Array<string>>([]);
-    const [gameBoard, setGameBoard] = useState<Record<string, string[]>>({});
 
     useEffect(() => {
-        updateGame();
+        updateStatus();
         const interval = setInterval(() => {
-            updateGame();
+            updateStatus();
         }, 30000); //TODO: drop this to 2 seconds when we have a real server
         return () => clearInterval(interval);
     }, []);
 
-    const playerName = useParams().id;
+    const playerName = useParams().id || 'Unknown Player';
     console.log(state);
 
-    function updateGame() {
-        updateStatus();
-        updateGameBoard();
-        updateHistoryLog();
+    function errorHandler (error: string) {
+        return setState({
+            ...state, 
+            showError: true,
+            errorMessage: error,
+        });
     };
 
     const updateStatus = () => {
@@ -44,55 +40,6 @@ function PlayerPage() {
             setStatus(data);
         });
     }
-
-    const updateGameBoard = () => {
-        fetch(`/game_board/${playerName}`, {
-        })
-            .then((response) => {
-                if (response.ok) {
-                    console.log('here1');
-                    return response.json();
-                }
-                console.log('here2');
-                return Promise.reject(response);
-            })
-            .then((data) => {
-                console.log('got game board');
-                console.log(data);
-                setGameBoard(data);
-            })
-            .catch((response) => {
-                console.log('here4');
-                response.json().then((json: any) => {
-                    console.log('error caught');
-                    console.log(json);
-                    setState({ ...state, showError: true, errorMessage: json.error })
-                })
-            });
-    };
-
-    const updateHistoryLog = () => {
-        fetch(`/history_log/${playerName}`, {
-        }).then((response) => {
-            if (response.ok) {
-                console.log('hist1');
-                return response.json();
-            }
-            return Promise.reject(response);
-        })
-            .then((data) => {
-                console.log('got history log');
-                console.log(data);
-                setHistoryLog(data);
-            })
-            .catch((response) => {
-                response.json().then((json: any) => {
-                    console.log('hist error caught');
-                    console.log(json);
-                    setState({ ...state, showError: true, errorMessage: json.error })
-                })
-            });
-    };
 
     const alertPopup = () => {
         if (state.showError) {
@@ -129,82 +76,15 @@ function PlayerPage() {
                     setState({ ...state, showError: true, errorMessage: json.error })
                 })
             }).finally(() => {
-                updateGame();
+                updateStatus();
             });
         ;
     }
-    const renderGameBoard = () => {
-        return (
-
-            <div className="game-board">
-                <div className="game-board-header">
-                    <h3>Board State</h3>
-                </div>
-                <div className="game-board-players">
-                    {Object.keys(gameBoard).map((player) => {
-                        return (renderPlayerBoard(player, gameBoard[player]))
-                    })}
-                </div>
-            </div>
-        )
-    };
-
-    const renderPlayerBoard = (player: string, playerBoard: string[]) => {
-        console.log(`Player is ${player}, board is ${playerBoard}`)
-        return (
-            <div key={`player-board-${player}`} className="player-board">
-                < div className="player-board-header">
-                    {player}
-                </div>
-                {playerBoard.map((letter, index) => {
-                    return renderLetter(letter, index)
-                })}
-            </div>
-        )
-    };
-
-    const renderLetter = (letter: string, index: number) => {
-        return (
-            <div className="letter-container">
-                <div className="letter-container-letter">
-                    {
-                        {
-                            'BLANK': '?',
-                            'REVEALED': '*',
-                            'BONUS': generateRandomLetter(),
-                        }[letter] || letter
-                    }
-                </div>
-            </div>
-        )
-    };
-
-    const renderHistory = () => {
-        return (
-            <div className="history-log">
-                <div className="history-log-header">
-                    <h3>History Log</h3>
-                </div>
-                <div className="history-log-messages">
-                    {historyLog.map((log, index) => {
-                        return renderHistoryMessage(log, index)
-                    })}
-                </div>
-            </div>
-        )
-    };
-
-    const renderHistoryMessage = (logMessage: String, index: number) => {
-        return (
-            <div key={`log-message-${index}`} className="history-log-message">
-                {logMessage}
-            </div>)
-    };
 
     const renderGame = () => {
         return (
             <div className="game-container">
-                {renderGameBoard()}
+                {GameBoard(playerName, errorHandler)}
                 <div className="actions">
                     <Button
                         variant="primary"
@@ -230,6 +110,9 @@ function PlayerPage() {
     const handleAdvance = () => {
     };
 
+    // Must render the game board first other wise React hooks are out of order
+    const renderedGameBoard = renderGame();
+    
     return (
         <div
             className="bg"
@@ -249,9 +132,9 @@ function PlayerPage() {
                     </Button>
                 }
                 {status === 'in_progress' &&
-                    renderGame()
+                    renderedGameBoard
                 }
-                {renderHistory()}
+                {HistoryLog(playerName, errorHandler)}
             </div>
         </div>
     );
