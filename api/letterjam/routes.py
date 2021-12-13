@@ -27,6 +27,7 @@ state = State(players=[],
               words=[],
               history_log=[],
               status=GameStatus.waiting_to_start,
+              bonus_letters=None,
               hint_tokens=None)
 
 
@@ -71,12 +72,19 @@ def players():
         state.update_history_log(f'Player {player.name} joined')
         return jsonify(success=True)
 
+@letterjam.route('/bonus_letter', methods=['POST'])
+def add_bonus_letter():
+    letter = request.get_json()
+    state.add_bonus_letter(letter['bonus_letter'])
+    state.update_history_log(f"Bonus Letter Added: {letter['bonus_letter']}")
+    return jsonify(success=True)
+
 
 @letterjam.route('/history_log/<player_name>')
 def history_log(player_name):
     global state
     # History log shows latest action at the top, so reverse the list
-    log = state.history_log_for_player(player_name)
+    log = state.history_log_for_player(Player.find_player_in_list(player_name, state.players))
     log.reverse()
     return jsonify(log), 200
 
@@ -110,6 +118,7 @@ def advance(player_name):
     player = Player.find_player_in_list(player_name, state.players)
     if not player:
         return jsonify({'error': 'Player not found'}), 400
+    # word_to_advance = Word.word_for_guesser(player, state.words).advance()
     for word in state.words:
         if word.guesser == player:
             word.advance()
@@ -118,10 +127,9 @@ def advance(player_name):
 
 
 @letterjam.route('/hint/<hint_giver>', methods=['POST'])
-# Takes ?player=X&hint=Y
 def hint(hint_giver: str):
     global state
-    hint_json = request.form.get('hint')
+    hint_json = request.get_json()
     # hint json looks like
     # {
     # 'letters':
@@ -135,11 +143,12 @@ def hint(hint_giver: str):
     #   ],
     # }
     state.hint_count += 1
-    state.update_history_log(
-        Hint.from_json(hint_json,
-                       Player.find_player_in_list(hint_giver, state.players),
-                       state.hint_count,
-                       state.players))
+    hint_to_update = Hint.from_json(json=hint_json,
+                       giver=Player.find_player_in_list(hint_giver, state.players),
+                       number=state.hint_count,
+                       players_list=state.players,
+                       words_list=state.words)
+    state.update_history_log(hint_to_update)
     state.save()
     return jsonify(success=True)
 

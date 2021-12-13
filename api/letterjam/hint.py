@@ -6,7 +6,7 @@ class Hint:
     def __init__(self, number, letters, giver: Player) -> None:
         self.number = number
         self._letters = letters
-        self.giver = None
+        self.giver = giver
 
     @property
     def letters(self) -> str:
@@ -23,7 +23,7 @@ class Hint:
         return representation
 
     @staticmethod
-    def from_json(json, giver, number, players_list) -> 'Hint':
+    def from_json(json, giver: Player, number: int, players_list, words_list) -> 'Hint':
         # json looks like
         # {
         # 'letters':
@@ -38,8 +38,8 @@ class Hint:
         # }
         letters = []
         for letter_json in json['letters']:
-            letters.append(Letter.from_json(letter_json, players_list))
-        return Hint(letters, giver, number)
+            letters.append(Letter.from_json(letter_json, giver, players_list, words_list))
+        return Hint(number, letters, giver)
 
     def __str__(self) -> str:
         return self._letters

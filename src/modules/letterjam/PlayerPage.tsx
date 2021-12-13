@@ -7,7 +7,6 @@ import { Alert, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import GameBoard from './GameBoard';
 import HistoryLog from './HistoryLog';
-import HintPopup from './HintPopup';
 
 function PlayerPage() {
     const [state, setState] = useState({
@@ -16,19 +15,17 @@ function PlayerPage() {
         loading: true,
     });
     const [status, setStatus] = useState('');
-    const [modalShow, setModalShow] = useState(false);
 
 
     useEffect(() => {
         updateStatus();
         const interval = setInterval(() => {
             updateStatus();
-        }, 30000); //TODO: drop this to 2 seconds when we have a real server
+        }, 5000);
         return () => clearInterval(interval);
     }, []);
 
     const playerName = useParams().id || 'Unknown Player';
-    console.log(state);
 
     function errorHandler(error: string) {
         return setState({
@@ -86,31 +83,8 @@ function PlayerPage() {
 
     const renderGame = () => {
         return (
-            <div className="game-container">
-                {GameBoard(playerName, errorHandler)}
-                <div className="actions">
-                    <Button
-                        className='hint-button'
-                        variant="primary"
-                        size="lg"
-                        onClick={() => { setModalShow(true) }}
-                    >
-                        Hint
-                    </Button>
-                    <Button
-                        className='success-button'
-                        variant="success"
-                        size="lg"
-                        onClick={() => { handleAdvance() }}
-                    >
-                        Advance
-                    </Button>
-                </div>
-            </div>
+            GameBoard(playerName, errorHandler)
         )
-    };
-
-    const handleAdvance = () => {
     };
 
     // Must render the game board first other wise React hooks are out of order
@@ -135,12 +109,6 @@ function PlayerPage() {
                         Start Game
                     </Button>
                 }
-                <HintPopup
-                    hintgiver={playerName}
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                    errorhandler={errorHandler}
-                />
                 {status === 'in_progress' &&
                     renderedGameBoard
                 }

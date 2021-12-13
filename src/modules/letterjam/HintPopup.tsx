@@ -1,8 +1,8 @@
 import './HintPopup.css';
 import { useState, useEffect } from 'react';
-import { Modal, Container, Row, Col, Button } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 
-type Letter = {
+export type Letter = {
     owner: string;
     raw: string;
 }
@@ -13,51 +13,64 @@ function HintPopup(
         show: boolean;
         onHide: () => void;
         errorhandler: Function;
+        letters: Letter[];
     }
 ) {
     const [letters, setLetters] = useState(
         [
-            { owner: 'space', raw: ' ' },
-            { owner: '-', raw: '-' },
-            { owner: '!', raw: '!' },
-            { owner: '?', raw: '?' },
-            { owner: 'arne', raw: 'e' },
-            { owner: 'ellen', raw: 'g' },
+            ...props.letters,
+            { owner: 'custom', raw: "{}" },
+            { owner: 'wild', raw: "*" },
+            { owner: 'space', raw: " " },
         ]
     );
     const [hints, setHints] = useState([] as Letter[]);
 
+    useEffect(() => {
+        console.log('letters updated')
+        console.log(letters)
+    }, [letters]);
 
     function HintBoard() {
+    
+        const renderCurrentHint = () => {
+            return (
+                hints.map(hint => hint.raw)
+                );
+        };
+
         const renderPlayerHint = (letter: Letter) => {
-           return( <div key={`player-hint-${letter.owner}`} className="player-board">
+            return (<div key={`player-hint-${letter.owner}`} className="player-board">
                 < div className="player-board-header">
                     {letter.owner}
                 </div>
                 {renderLetter(letter)}
             </div>
-           );
+            );
         }
         const renderLetter = (letter: Letter) => {
             return (
-                <div
-                    className="letter-container"
-                    key={`hint-letter-container-${letter.owner}`}
-                    // onClick={letterClicked(letter)}
+                <Button
+                    className="hint-letter-button"
+                    key={`hint-letter-button-${letter.owner}`}
+                    onClick={() => letterClicked(letter)}
                 >
-
                     {
                         letter.raw
                     }
-                </div>
+                </Button>
             )
         }
+
         return (
             <div className="game-board">
                 <div className="game-board-players">
                     {letters.map((letter) => {
                         return (renderPlayerHint(letter))
                     })}
+                </div>
+                <div className="hint-board-hint">
+                    Current hint is:  {renderCurrentHint()}
                 </div>
             </div>
         )
@@ -102,7 +115,8 @@ function HintPopup(
 
     return (
         <Modal
-            {...props}
+            show={props.show}
+            onHide={props.onHide}
             backdrop="static"
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
@@ -116,6 +130,7 @@ function HintPopup(
                 {HintBoard()}
             </Modal.Body>
             <Modal.Footer>
+                <Button variant="danger" onClick={() => setHints([])}>Clear</Button>
                 <Button onClick={handleSubmitHint}>Give Hint</Button>
             </Modal.Footer>
         </Modal>

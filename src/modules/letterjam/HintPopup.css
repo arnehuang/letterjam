@@ -6,3 +6,25 @@
   background: #dad9d9e5;
   border-radius: 10px;
 }
+
+.hint-letter-button {
+  font-size: calc(10px + 2vmin);
+  font-weight: bold;
+  color: #000000;
+  background: url("/src/assets/img/blank_tile.jpg") center; 
+  background-size: cover;
+  border: 1px solid black;
+  border-radius: 4px;
+  width: 48px;
+  height: 48px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+}
+
+.hint-board-hint {
+  font-size: calc(14px + 2vmin);
+  overflow: scroll;
+}

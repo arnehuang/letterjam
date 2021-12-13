@@ -28,6 +28,8 @@
   font-size: calc(10px + 2vmin);
   /* font-weight: bolder; */
   min-width: 150px;
+  display: flex;
+  align-items: center; 
 }
 
 .letter-container {

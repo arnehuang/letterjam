@@ -10,7 +10,7 @@ from .player import Player
 class Word:
     def __init__(self, word: str, player: Player, guesser: Player = None):
         self.word = word.upper()
-        self.scrambled = Word.scramble(word)
+        self.scrambled = Word.scramble(word) # Scrambled also contains bonus letters at endgame
         self.creator = player
         self.guesser = guesser
         self.revealed_idx = 0
@@ -40,3 +40,12 @@ class Word:
         l = list(word)
         random.shuffle(l)
         return ''.join(l)
+
+    @staticmethod
+    def word_for_guesser(guesser: Player, list_of_words):
+        for word_in_list in list_of_words:
+            if guesser == word_in_list.guesser:
+                return word_in_list
+        return None
+
+

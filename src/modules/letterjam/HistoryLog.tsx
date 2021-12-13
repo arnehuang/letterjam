@@ -9,7 +9,7 @@ function HistoryLog(playerName: string, errorHandler: Function) {
         updateHistoryLog();
         const interval = setInterval(() => {
             updateHistoryLog();
-        }, 30000); //TODO: drop this to 2 seconds when we have a real server
+        }, 2000);
         return () => clearInterval(interval);
     }, []);
 

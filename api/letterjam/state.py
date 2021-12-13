@@ -20,13 +20,15 @@ class State:
                  history_log,
                  status: GameStatus,
                  hint_tokens,
+                 bonus_letters,
                  hint_count=0):
         self._players = players
         self._words = words
         self._history_log = history_log
         self._status: GameStatus = status
         self._hint_tokens = hint_tokens
-        self.hint_count = hint_count  # todo - decprecate in favour of hint objects?
+        self.hint_count = hint_count 
+        self._bonus_letters = bonus_letters if bonus_letters else []
 
     @property
     def players(self):
@@ -47,6 +49,14 @@ class State:
     @property
     def hint_tokens(self):
         return self._hint_tokens
+
+    @property
+    def bonus_letters(self):
+        return self._bonus_letters
+
+    def add_bonus_letter(self, value):
+        if value not in self.bonus_letters:
+            self._bonus_letters.append(value)
 
     @status.setter
     def status(self, value):
