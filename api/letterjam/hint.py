@@ -23,7 +23,7 @@ class Hint:
         return representation
 
     @staticmethod
-    def from_json(json, giver: Player, number: int, players_list, words_list) -> 'Hint':
+    def from_json(json, giver: Player, number: int, players_list, words_list, state) -> 'Hint':
         # json looks like
         # {
         # 'letters':
@@ -37,8 +37,10 @@ class Hint:
         #   ],
         # }
         letters = []
+        seen_players = []
         for letter_json in json['letters']:
-            letters.append(Letter.from_json(letter_json, giver, players_list, words_list))
+            letters.append(Letter.from_json(letter_json, seen_players, giver, players_list, words_list, state))
+            seen_players.append(Player.find_player_in_list(letter_json.get('owner'), players_list))
         return Hint(number, letters, giver)
 
     def __str__(self) -> str:

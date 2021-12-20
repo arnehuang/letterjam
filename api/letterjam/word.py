@@ -18,22 +18,25 @@ class Word:
     def __repr__(self):
         return "Word" + ','.join([str(x) for x in [self.word, self.scrambled, self.guesser, self.revealed_idx]])
 
-    def advance(self):
+    def advance(self, state):
         if self.revealed_idx >= len(self.word) - 1:
             self.scrambled += random.choice(string.ascii_lowercase)
         self.revealed_idx += 1
+        state.update_history_log(f"{self.guesser} advanced")
         # socketio.emit('word advanced', {}, namespace='/word')
 
-    def assign_guesser(self, players):
-        # TODO: Assign a random guesser instead of a fixed one
-        if self.guesser is None:
-            self_idx = players.index(self.creator)
-            if self_idx < len(
-                    players) - 1:  # Array [a, b, c] has len 3 and idx 0, 1, 2. If it's 0 or 1, move right otherwise overflow
-                guesser_idx = self_idx + 1
-            else:
-                guesser_idx = 0
-            self.guesser = players[guesser_idx]
+    # def assign_guesser(self, players):
+    #     # TODO: Assign a random guesser instead of a fixed one
+    #     if self.guesser is None:
+    #         self_idx = players.index(self.creator)
+    #         if self_idx < len(
+    #                 players) - 1:  # Array [a, b, c] has len 3 and idx 0, 1, 2. If it's 0 or 1, move right otherwise overflow
+    #             guesser_idx = self_idx + 1
+    #         else:
+    #             guesser_idx = 0
+    #         self.guesser = players[guesser_idx]
+    def assign_guesser(self, player: Player):
+        self.guesser = player
 
     @staticmethod
     def scramble(word):

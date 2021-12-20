@@ -16,27 +16,28 @@ function HintPopup(
         letters: Letter[];
     }
 ) {
-    const [letters, setLetters] = useState(
-        [
-            ...props.letters,
-            { owner: 'custom', raw: "{}" },
-            { owner: 'wild', raw: "*" },
-            { owner: 'space', raw: " " },
-        ]
-    );
+    const [letters, setLetters] = useState([] as Letter[]);
     const [hints, setHints] = useState([] as Letter[]);
 
     useEffect(() => {
         console.log('letters updated')
-        console.log(letters)
-    }, [letters]);
+        console.log(props.letters)
+        setLetters(
+            [
+                ...props.letters,
+                { owner: 'custom', raw: "{}" },
+                { owner: 'wild', raw: "*" },
+                { owner: 'space', raw: " " },
+            ]
+        )
+    }, [props.letters]);
 
     function HintBoard() {
-    
+
         const renderCurrentHint = () => {
             return (
                 hints.map(hint => hint.raw)
-                );
+            );
         };
 
         const renderPlayerHint = (letter: Letter) => {

@@ -6,21 +6,39 @@ import HintPopup, { Letter } from './HintPopup';
 function GameBoard(playerName: string, errorHandler: Function, onclick = () => void 0) {
 
     const [loading, setLoading] = useState(true);
-    const [gameBoard, setGameBoard] = useState<Record<string, string[]>>({});
+    const [gameBoardData, setGameBoardData] = useState<Record<string, string[]>>({});
     const [modalShow, setModalShow] = useState(false);
     const [hintLetters, setHintLetters] = useState<Letter[]>([]);
 
     useEffect(() => {
+        function updateGameBoard() {
+            fetch(`/game_board/${playerName}`, {
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    return Promise.reject(response);
+                })
+                .then((data) => {
+                    setGameBoardData(data);
+                })
+                .catch((response) => {
+                    console.log('gameboard error caught');
+                    response.json().then((json: any) => {
+                        console.log('gameboard error:');
+                        console.log(json);
+                        errorHandler(json.error);
+                    })
+                }).finally(() => {
+                    setLoading(false);
+                });
+            ;
+        };
         updateGameBoard();
-        const interval = setInterval(() => {
-            updateGameBoard();
-        }, 2000);
+        const interval = setInterval(updateGameBoard, 2000);
         return () => clearInterval(interval);
-    }, []);
-
-    useEffect(() => {
-        generateLettersForHints();
-    }, [gameBoard]);
+    }, [playerName, errorHandler]);
 
     const renderPlayerBoard = (player: string, playerBoard: string[], onclick: () => void) => {
         return (
@@ -56,32 +74,7 @@ function GameBoard(playerName: string, errorHandler: Function, onclick = () => v
         )
     };
 
-    const updateGameBoard = () => {
-        fetch(`/game_board/${playerName}`, {
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                return Promise.reject(response);
-            })
-            .then((data) => {
-                setGameBoard(data);
-            })
-            .catch((response) => {
-                console.log('gameboard error caught');
-                response.json().then((json: any) => {
-                    console.log('gameboard error:');
-                    console.log(json);
-                    errorHandler(json.error);
-                })
-            }).finally(() => {
-                setLoading(false);
-            });
-        ;
-    };
-
-    const handleAdvance = () => {
+    function handleAdvance() {
         return fetch(`/advance/${playerName}`, {
             'method': 'POST',
             headers: {
@@ -98,8 +91,6 @@ function GameBoard(playerName: string, errorHandler: Function, onclick = () => v
                 console.log(json);
                 errorHandler(json.error);
             })
-        }).finally(() => {
-            updateGameBoard();
         });
     };
 
@@ -130,8 +121,17 @@ function GameBoard(playerName: string, errorHandler: Function, onclick = () => v
             ;
     };
 
-    const generateLettersForHints = () => {
+    function generateLettersForHints() {
         const generateHintforPlayer = (player: string, letters: string[]) => {
+            // # TODO: need to have multiple Bonus Letter players  in order to surface multiple bonus letters
+            // if (player === 'Bonus Letters') {
+            //     return letters.map((a_letter) => {
+            //         return {
+            //             owner: player,
+            //             raw: a_letter,
+            //         }
+            //     })
+            // }
             for (let i = 0; i < letters.length; i++) {
                 if (i === letters.length - 1
                     || letters[i + 1] === 'BLANK'
@@ -145,15 +145,19 @@ function GameBoard(playerName: string, errorHandler: Function, onclick = () => v
             }
             return { owner: player, raw: "GODDAMN BUGS" }
         }
-        var hintLettersToSet = Object.keys(gameBoard).filter(
+        console.log(`inside generateLettersForHints, game board is:`)
+        console.log(gameBoardData)
+        var hintLettersToSet = Object.keys(gameBoardData).filter(
             function (player: string) {
-                return player !== 'Bonus Letters';
+                return gameBoardData[player].length > 0;
             }
         ).map((player) => {
-            return generateHintforPlayer(player, gameBoard[player])
+            return generateHintforPlayer(player, gameBoardData[player])
         })
         setHintLetters(hintLettersToSet)
     };
+
+    useEffect(generateLettersForHints, [gameBoardData]);
 
     if (loading
         || hintLetters.length === 0
@@ -167,8 +171,8 @@ function GameBoard(playerName: string, errorHandler: Function, onclick = () => v
                     <h3>Board State</h3>
                 </div>
                 <div className="game-board-players">
-                    {Object.keys(gameBoard).map((player) => {
-                        return (renderPlayerBoard(player, gameBoard[player], onclick))
+                    {Object.keys(gameBoardData).map((player) => {
+                        return (renderPlayerBoard(player, gameBoardData[player], onclick))
                     })}
                 </div>
             </div>
@@ -192,7 +196,7 @@ function GameBoard(playerName: string, errorHandler: Function, onclick = () => v
                     className='success-button'
                     variant="success"
                     size="lg"
-                    onClick={() => { handleAdvance() }}
+                    onClick={handleAdvance}
                 >
                     Advance
                 </Button>

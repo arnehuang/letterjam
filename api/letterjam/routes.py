@@ -106,7 +106,7 @@ def _start_game():
         e = f'Error: Current Game status is {state.status}'
         return jsonify({'error': str(e)}), 400
     from . import start_game
-    start_game(state.words, state.players)
+    start_game(state.words, state.players, state)
     state.update_history_log(f"Game started with players: {state.players}")
     state.status = GameStatus.in_progress
     return jsonify(success=True)
@@ -121,8 +121,7 @@ def advance(player_name):
     # word_to_advance = Word.word_for_guesser(player, state.words).advance()
     for word in state.words:
         if word.guesser == player:
-            word.advance()
-            state.update_history_log(f"{player} advanced")
+            word.advance(state)            
     return jsonify(success=True)
 
 
@@ -147,7 +146,9 @@ def hint(hint_giver: str):
                        giver=Player.find_player_in_list(hint_giver, state.players),
                        number=state.hint_count,
                        players_list=state.players,
-                       words_list=state.words)
+                       words_list=state.words,
+                       state=state,
+                       )
     state.update_history_log(hint_to_update)
     state.save()
     return jsonify(success=True)

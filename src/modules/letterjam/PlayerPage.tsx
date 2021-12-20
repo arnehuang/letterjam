@@ -1,6 +1,6 @@
 import './PlayerPage.css';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import NavBar from '../../components/NavBar';
 // import io from 'socket.io-client';
 import { Alert, Button } from 'react-bootstrap';
@@ -27,14 +27,17 @@ function PlayerPage() {
 
     const playerName = useParams().id || 'Unknown Player';
 
-    function errorHandler(error: string) {
-        return setState({
-            ...state,
-            showError: true,
-            errorMessage: error,
-        });
-    };
-
+    const errorHandler = useCallback(
+        (error: string) => {
+            setState({
+                ...state,
+                showError: true,
+                errorMessage: error,
+                loading: false,
+            });
+        }, [state]
+    );
+    
     const updateStatus = () => {
         fetch('/status').then(res => res.json()).then(data => {
             setStatus(data);

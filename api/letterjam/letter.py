@@ -16,7 +16,7 @@ class Letter:
         return self.raw
 
     @staticmethod
-    def from_json(json: dict, hint_giver: Player, players_list, words_list) -> 'Letter':
+    def from_json(json: dict, seen_players, hint_giver: Player, players_list, words_list, state) -> 'Letter':
         # Looks like
         #       {
         #           'raw': 'a', 'owner': 'playername',
@@ -30,6 +30,12 @@ class Letter:
             if hint_giver.name == guesser.name:
                 guessers_word = Word.word_for_guesser(guesser, words_list)
                 raw = guessers_word.scrambled[guessers_word.revealed_idx]
+            print(f"Guesser: {guesser}")
+            print(f"guesser is_bot: {guesser.is_bot()}")
+            print(f"seen_players: {seen_players}")
+            if guesser.is_bot() and guesser not in seen_players:
+                print(f"{guesser.name} is a bot, but not in seen_players")
+                Word.word_for_guesser(guesser, words_list).advance(state)
         except (KeyError, AttributeError) as e:
             guesser = None
         return Letter(raw, guesser)
