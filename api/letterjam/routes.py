@@ -158,10 +158,11 @@ def hint(hint_giver: str):
 def reset():
     global state
     state = State(players=[],
-                  words=[],
-                  history_log=[],
-                  status=GameStatus.waiting_to_start,
-                  hint_tokens=None)
+              words=[],
+              history_log=[],
+              status=GameStatus.waiting_to_start,
+              bonus_letters=None,
+              hint_tokens=None)
     logger.warning("RESET!")
     return jsonify(success=True)
 
