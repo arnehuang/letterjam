@@ -22,6 +22,7 @@ function GameBoard(playerName: string, errorHandler: Function, onclick = () => v
                 })
                 .then((data) => {
                     setGameBoardData(data);
+                    setLoading(false);
                 })
                 .catch((response) => {
                     console.log('gameboard error caught');
@@ -30,9 +31,7 @@ function GameBoard(playerName: string, errorHandler: Function, onclick = () => v
                         console.log(json);
                         errorHandler(json.error);
                     })
-                }).finally(() => {
-                    setLoading(false);
-                });
+                })
             ;
         };
         updateGameBoard();

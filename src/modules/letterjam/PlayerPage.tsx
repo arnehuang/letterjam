@@ -16,7 +16,6 @@ function PlayerPage() {
     });
     const [status, setStatus] = useState('');
 
-
     useEffect(() => {
         updateStatus();
         const interval = setInterval(() => {
@@ -30,12 +29,11 @@ function PlayerPage() {
     const errorHandler = useCallback(
         (error: string) => {
             setState({
-                ...state,
                 showError: true,
                 errorMessage: error,
                 loading: false,
             });
-        }, [state]
+        }, []
     );
     
     const updateStatus = () => {
