@@ -45,7 +45,7 @@ function LandingPage() {
         };
     
         if (!hasFetchedData.current) {
-            fetch('/status').then(res => res.json()).then(data => {
+            fetch('/api/status').then(res => res.json()).then(data => {
                 updateStatus(data);
             });
             hasFetchedData.current = true;
@@ -97,7 +97,7 @@ function LandingPage() {
         event.preventDefault();
         const playerName = event.target.playerNameForm.value;
         const word = event.target.playerWordForm.value;
-        return fetch(`/players`, {
+        return fetch(`/api/players`, {
             'method': 'POST',
             headers: {
                 'Content-Type': 'application/json'

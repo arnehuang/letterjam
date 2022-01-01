@@ -4,7 +4,7 @@ import {useEffect} from 'react';
 
 function ResetPage() {
     useEffect(() => {
-        fetch('/reset');
+        fetch('/api/reset');
     });
 
     return (

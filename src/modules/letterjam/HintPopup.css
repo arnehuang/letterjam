@@ -1,7 +1,8 @@
 
 .hint-popup {
   padding: 12px 8px 8px 12px;
-  max-width: 30%;
+  max-width: 50%;
+  min-width: 600px;
   border: 1px solid #c4c4c4;
   background: #dad9d9e5;
   border-radius: 10px;
@@ -15,8 +16,8 @@
   background-size: cover;
   border: 1px solid black;
   border-radius: 4px;
-  width: 48px;
-  height: 48px;
+  width: 80px;
+  height: 80px;
   margin-right: 8px;
   margin-bottom: 8px;
   display: flex;
@@ -27,4 +28,12 @@
 .hint-board-hint {
   font-size: calc(14px + 2vmin);
   overflow: scroll;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.hint-player-board {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }

@@ -41,11 +41,11 @@ function HintPopup(
         };
 
         const renderPlayerHint = (letter: Letter) => {
-            return (<div key={`player-hint-${letter.owner}`} className="player-board">
+            return (<div key={`player-hint-${letter.owner}`} className="hint-player-board">
+                {renderLetter(letter)}
                 < div className="player-board-header">
                     {letter.owner}
                 </div>
-                {renderLetter(letter)}
             </div>
             );
         }
@@ -65,20 +65,21 @@ function HintPopup(
 
         return (
             <div className="game-board">
+                <div className="hint-board-hint">
+                    Current hint is:  {renderCurrentHint()}
+                </div>
+
                 <div className="game-board-players">
                     {letters.map((letter) => {
                         return (renderPlayerHint(letter))
                     })}
-                </div>
-                <div className="hint-board-hint">
-                    Current hint is:  {renderCurrentHint()}
                 </div>
             </div>
         )
     }
 
     const handleSubmitHint = (event: any) => {
-        return fetch(`/hint/${props.hintgiver}`, {
+        return fetch(`/api/hint/${props.hintgiver}`, {
             'method': 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -116,6 +117,7 @@ function HintPopup(
 
     return (
         <Modal
+            // className="hint-popup"
             show={props.show}
             onHide={props.onHide}
             backdrop="static"

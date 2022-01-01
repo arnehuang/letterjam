@@ -12,7 +12,7 @@ function GameBoard(playerName: string, errorHandler: Function, onclick = () => v
 
     useEffect(() => {
         function updateGameBoard() {
-            fetch(`/game_board/${playerName}`, {
+            fetch(`/api/game_board/${playerName}`, {
             })
                 .then((response) => {
                     if (response.ok) {
@@ -74,7 +74,7 @@ function GameBoard(playerName: string, errorHandler: Function, onclick = () => v
     };
 
     function handleAdvance() {
-        return fetch(`/advance/${playerName}`, {
+        return fetch(`/api/advance/${playerName}`, {
             'method': 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -95,7 +95,7 @@ function GameBoard(playerName: string, errorHandler: Function, onclick = () => v
 
     const handleAddBonus = (event: any) => {
         const bonusLetter = event.target.bonusLetterForm.value;
-        return fetch(`/bonus_letter`, {
+        return fetch(`/api/bonus_letter`, {
             'method': 'POST',
             headers: {
                 'Content-Type': 'application/json'

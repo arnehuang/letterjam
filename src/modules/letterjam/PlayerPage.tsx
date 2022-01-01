@@ -37,7 +37,7 @@ function PlayerPage() {
     );
     
     const updateStatus = () => {
-        fetch('/status').then(res => res.json()).then(data => {
+        fetch('/api/status').then(res => res.json()).then(data => {
             setStatus(data);
         });
     }
@@ -56,7 +56,7 @@ function PlayerPage() {
     };
 
     const _startGame = () => {
-        return fetch(`/start_game`, {
+        return fetch(`/api/start_game`, {
             'method': 'POST',
             headers: {
                 'Content-Type': 'application/json'

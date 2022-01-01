@@ -12,6 +12,24 @@ npm install
 npm install --global yarn
 yarn start
 
+sudo amazon-linux-extras install -y nginx1
+
+ server {
+	listen       3000;
+    listen       [::]:3000;
+    server_name  letterjam;
+    root         /home/ec2-user/letterjam/build;
+    index index.html;
+
+    location /api {
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_pass http://localhost:5000;
+    }
+
+
 *Backend
 cd api
 python3 install pipenv

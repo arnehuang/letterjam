@@ -11,10 +11,11 @@ logger = current_app.logger
 random_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 def start_game(words, players, state):
-    shuffled_players = copy.deepcopy(players)
-    random.shuffle(shuffled_players)
+    # shuffled_players = copy.deepcopy(players)
+    # random.shuffle(shuffled_players)
     for word_idx, word in enumerate(words):
-        word.assign_guesser(players[word_idx])
+        # word.assign_guesser(players[word_idx])
+        word.assign_guesser(players)
     if len(players) < 6:
         current_word_length = len(words[0].word)
         bots_to_add = 6 - len(players)
