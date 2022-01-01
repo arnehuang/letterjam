@@ -7,7 +7,6 @@ html, body {
     height: 100%;
   }
 
-
   .start-game-button {
     max-height: 40px;
   }
@@ -20,16 +19,22 @@ html, body {
   }
 
   .game-container{
-    /* todo: max width to not run into history log? */
     width: 100%;
-    max-width: 678px;
   }
   .actions{
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 8px;
-    justify-content: center;
+    margin: 8px 24px 0px 24px;
+    justify-content: space-evenly;
+  }
+
+  .bonus-letter-form-group{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  
+    text-align: center;
   }
 
   .hint-button{
