@@ -1,0 +1,45 @@
+.App-bg {
+  background-color: #282c34;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center; 
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.App-logo {
+  height: 23vmin;
+  pointer-events: none;
+  padding-bottom: 30px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 2s linear alternate;
+  }
+}
+
+.Form-text {
+  font-family: "Iowan Old Style", "Sitka Text", Palatino, "Book Antiqua", serif  ;
+  color: black;
+  font-size: calc(10px + 2vmin);
+  font-weight: bolder;
+}
+
+.App-footer {
+  font-size: calc(10px + 1vmin);
+  font-weight: bolder;
+  text-align: center;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(-25deg);
+  }
+  to {
+    transform: rotate(25deg);
+  }
+}

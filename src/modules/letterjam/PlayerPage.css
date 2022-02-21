@@ -1,0 +1,43 @@
+html, body { 
+    background: url("/src/assets/img/background.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100%;
+  }
+
+  .start-game-button {
+    max-height: 40px;
+  }
+
+  .player-page-contents {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 600px;
+  }
+
+  .game-container{
+    width: 100%;
+  }
+  .actions{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 8px 24px 0px 24px;
+    justify-content: space-evenly;
+  }
+
+  .bonus-letter-form-group{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  
+    text-align: center;
+  }
+
+  .hint-button{
+    margin-left: 10px;
+    margin-right: 8px
+  }

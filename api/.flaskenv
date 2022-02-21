@@ -1,0 +1,3 @@
+FLASK_APP=application.py
+FLASK_ENV=development
+FLASK_SECRET_KEY=donthackme

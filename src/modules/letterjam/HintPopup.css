@@ -1,0 +1,39 @@
+
+.hint-popup {
+  padding: 12px 8px 8px 12px;
+  max-width: 50%;
+  min-width: 600px;
+  border: 1px solid #c4c4c4;
+  background: #dad9d9e5;
+  border-radius: 10px;
+}
+
+.hint-letter-button {
+  font-size: calc(10px + 2vmin);
+  font-weight: bold;
+  color: #000000;
+  background: url("/src/assets/img/blank_tile.jpg") center; 
+  background-size: cover;
+  border: 1px solid black;
+  border-radius: 4px;
+  width: 80px;
+  height: 80px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+}
+
+.hint-board-hint {
+  font-size: calc(14px + 2vmin);
+  overflow: scroll;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.hint-player-board {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
