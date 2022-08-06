@@ -16,7 +16,7 @@ export default function NavBar(props: { show_players: boolean }) {
     // Component updated -> calls this. 
     useEffect(() => {
         if (!hasFetchedData.current) {
-            fetch('/api/players').then(res => res.json()).then(data => {
+            fetch(`${process.env.REACT_APP_API_URL}/api/players`).then(res => res.json()).then(data => {
                 if (data.length > 0) {
                     setState({
                         ...state,

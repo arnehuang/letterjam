@@ -79,7 +79,7 @@ function HintPopup(
     }
 
     const handleSubmitHint = (event: any) => {
-        return fetch(`/api/hint/${props.hintgiver}`, {
+        return fetch(`${process.env.REACT_APP_API_URL}/api/hint/${props.hintgiver}`, {
             'method': 'POST',
             headers: {
                 'Content-Type': 'application/json'

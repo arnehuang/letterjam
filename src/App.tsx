@@ -5,8 +5,11 @@ import ResetPage from './modules/letterjam/ResetPage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
+  console.log(process.env.REACT_APP_API_URL);
+  console.log("abc123");
+
   useEffect(() => {
-    document.title = "LetterJam - V2";
+    document.title = "LetterJam";
   }, []);
 
   return (

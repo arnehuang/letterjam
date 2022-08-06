@@ -36,4 +36,5 @@ python3 install pipenv
 pipenv install
 pipenv shell
 cd ..
-yarn start-pi
+export PYTHONPATH=~/Documents/github/letterjam/api
+yarn start-api

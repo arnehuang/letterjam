@@ -14,7 +14,7 @@ function HistoryLog(playerName: string, errorHandler: Function) {
     }, []);
 
     const updateHistoryLog = () => {
-        fetch(`/api/history_log/${playerName}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/api/history_log/${playerName}`, {
         }).then((response) => {
             if (response.ok) {
                 return response.json();

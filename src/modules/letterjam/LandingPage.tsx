@@ -45,7 +45,7 @@ function LandingPage() {
         };
     
         if (!hasFetchedData.current) {
-            fetch('/api/status').then(res => res.json()).then(data => {
+            fetch(`${process.env.REACT_APP_API_URL}/api/status`).then(res => res.json()).then(data => {
                 updateStatus(data);
             });
             hasFetchedData.current = true;
@@ -97,7 +97,7 @@ function LandingPage() {
         event.preventDefault();
         const playerName = event.target.playerNameForm.value;
         const word = event.target.playerWordForm.value;
-        return fetch(`/api/players`, {
+        return fetch(`${process.env.REACT_APP_API_URL}/api/players`, {
             'method': 'POST',
             headers: {
                 'Content-Type': 'application/json'
