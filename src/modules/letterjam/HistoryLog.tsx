@@ -1,19 +1,11 @@
 import './HistoryLog.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 function HistoryLog(playerName: string, errorHandler: Function) {
 
     const [historyLog, setHistoryLog] = useState<Array<string>>([]);
 
-    useEffect(() => {
-        updateHistoryLog();
-        const interval = setInterval(() => {
-            updateHistoryLog();
-        }, 2000);
-        return () => clearInterval(interval);
-    }, []);
-
-    const updateHistoryLog = () => {
+    const updateHistoryLog = useCallback(() => {
         fetch(`${process.env.REACT_APP_API_URL}/api/history_log/${playerName}`, {
         }).then((response) => {
             if (response.ok) {
@@ -29,7 +21,15 @@ function HistoryLog(playerName: string, errorHandler: Function) {
                     errorHandler(json.error )
                 })
             });
-    };
+    }, [playerName, errorHandler]);
+
+    useEffect(() => {
+        updateHistoryLog();
+        const interval = setInterval(() => {
+            updateHistoryLog();
+        }, 2000);
+        return () => clearInterval(interval);
+    }, [updateHistoryLog]);
 
     const renderHistoryMessage = (logMessage: String, index: number) => {
         return (
