@@ -1,40 +1,58 @@
-*Git
-sudo yum update -y
-sudo yum install git -y
+# Backend API
+## Local run
+`cd api`
 
-*Frontend
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-nvm install 12
-nvm use 12
-npm --version
-node --version
-npm install
-npm install --global yarn
-yarn start
+`python3 install pipenv`
 
-sudo amazon-linux-extras install -y nginx1
+`pipenv install`
 
- server {
-	listen       3000;
-    listen       [::]:3000;
-    server_name  letterjam;
-    root         /home/ec2-user/letterjam/build;
-    index index.html;
+`pipenv shell`
 
-    location /api {
-    proxy_set_header Host $http_host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_pass http://localhost:5000;
-    }
+`export PYTHONPATH=~/Documents/github/letterjam/api`
+
+`flask run` 
+
+Check http://localhost:8000/api/status
+## Docker run
+`docker build --platform=linux/amd64 -t letterjam:latest .`
+
+`docker run --name letterjam -d -p 8000:5000 --rm letterjam:latest`
+
+## push to dockerhub
+`docker login`
+
+`docker tag letterjam arnehuang/letterjam:latest-amd64`
+
+`docker push arnehuang/letterjam:latest-amd64`
+
+## debug docker logs
+`docker events&`
+
+`docker run --name letterjam -d -p 8000:5000 letterjam:latest`
+
+`docker container logs containeridhere`
+
+## Push to heroku
+`export DOCKER_DEFAULT_PLATFORM=linux/amd64`
+
+`heroku container:push web -a letterjam-api`
+
+`heroku container:release web -a letterjam-api`
 
 
-*Backend
-cd api
-python3 install pipenv
-pipenv install
-pipenv shell
-cd ..
-export PYTHONPATH=~/Documents/github/letterjam/api
-yarn start-api
+# Frontend
+`curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash`
+
+`nvm install 16`
+
+`nvm use 16`
+
+`npm --version`
+
+`node --version`
+
+`npm install`
+
+`npm install --global yarn`
+
+`yarn start`
