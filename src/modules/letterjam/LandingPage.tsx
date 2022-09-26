@@ -95,8 +95,8 @@ function LandingPage() {
 
     const handleAddPlayer = (event: any) => {
         event.preventDefault();
-        const playerName = event.target.playerNameForm.value;
-        const word = event.target.playerWordForm.value;
+        const playerName = event.target.playerNameForm.value.toLowerCase();
+        const word = event.target.playerWordForm.value.toLowerCase();
         return fetch(`${process.env.REACT_APP_API_URL}/api/players`, {
             'method': 'POST',
             headers: {
